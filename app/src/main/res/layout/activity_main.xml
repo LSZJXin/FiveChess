@@ -1,19 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.fivechess.MainActivity">
+    android:orientation="vertical"
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+   <android.support.v7.widget.Toolbar
+       android:id="@+id/toolbar"
+       android:layout_width="match_parent"
+       android:layout_height="?attr/actionBarSize"
+       android:background="@color/colorPrimary"
+       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+       />
 
-</android.support.constraint.ConstraintLayout>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       android:layout_gravity="center"
+       android:layout_marginLeft="55dp"
+       android:layout_marginRight="55dp"
+       android:gravity="center"
+       >
+
+      <Button
+          android:id="@+id/btn_single_mode"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="24dp"
+          android:text="@string/label_mode_single"
+          />
+
+      <Button
+          android:id="@+id/btn_ai_mode"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:textSize="24dp"
+          android:text="@string/label_mode_ai"
+          />
+
+      <Button
+          android:id="@+id/btn_wifi_mode"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:textSize="24dp"
+          android:text="@string/label_mode_wifi"
+          />
+
+   </LinearLayout>
+
+</LinearLayout>
