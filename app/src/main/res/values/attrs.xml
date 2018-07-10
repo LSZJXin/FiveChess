@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="chess_board">
+        <attr name="chess_line_color" format="color"></attr>
+        <attr name="chess_line_width" format="dimension"></attr>
+        <attr name="board_background_color" format="color"></attr>
+        <attr name="white_chess_color" format="color"></attr>
+        <attr name="black_chess_color" format="color"></attr>
+    </declare-styleable>
+</resources>

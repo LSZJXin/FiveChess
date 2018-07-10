@@ -27,11 +27,11 @@
        >
 
       <Button
-          android:id="@+id/btn_single_mode"
+          android:id="@+id/btn_fight_mode"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:textSize="24dp"
-          android:text="@string/label_mode_single"
+          android:text="@string/label_mode_fight"
           />
 
       <Button

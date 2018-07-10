@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.example.fivechess.chessview.ChessView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:chess_line_color = "#ff232222"
+        app:chess_line_width = "1sp"
+        app:board_background_color = "#ffab7938"
+        app:white_chess_color = "#ffece4e4"
+        app:black_chess_color = "#ee080808"
+        />
+
+</LinearLayout>
