@@ -13,7 +13,7 @@ public interface IChessVew {
     void drawChessBoard();
 
     //绘制棋子
-    void drawChess();
+    void drawChess(Canvas canvas);
 
     //绘制棋盘的5个焦点
     void drawBoardFocus(Canvas canvas);

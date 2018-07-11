@@ -7,11 +7,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.fivechess.R;
 import com.example.fivechess.chessgame.Chess;
+import com.example.fivechess.chessgame.Game;
 
 /**
  * Created by 张佳欣 on 2018/7/9.
@@ -66,18 +68,22 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
     private int lineCount = Chess.CHESS_BOARD_LINE_COUNT;
 
     //棋盘的左上角和右下角
-    float startX,startY,stopX,stopY;
+    private float startX,startY,stopX,stopY;
 
     /**
      * 棋子半径
      */
-    float chessRadius;
+    private float chessRadius;
 
     /**
      * 一个棋格的宽度
      */
-    float oneWidth;
+    private float oneWidth;
 
+    /**
+     * 游戏的逻辑
+     */
+    private Game game;
 
     private SurfaceHolder mHolder;
 
@@ -132,6 +138,8 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
         setFocusable(true);
         setFocusableInTouchMode(true);
         this.setKeepScreenOn(true);
+
+        game = new Game();
     }
 
     @Override
@@ -164,22 +172,29 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
         }
         //画棋盘
         drawChessBoard(canvas);
-        //画棋盘焦点
-        drawBoardFocus(canvas);
-        drawWhiteChess(canvas,8,8);
-        drawWhiteChess(canvas,12,12);
-        drawBlackChess(canvas,11,11);
-        drawBlackChess(canvas,6,6);
-        drawWhiteChessFocus(canvas,8,8);
-        drawBlackChessFocus(canvas,6,6);
+
         //对画布内容进行提交
         mHolder.unlockCanvasAndPost(canvas);
     }
 
     @Override
-    public void drawChess() {
-
+    public void drawChess(Canvas canvas) {
+        int [][]chessBoardStatus = game.getChessBoardStatus();
+        for (int i=0;i<lineCount;i++){
+            for (int j=0;j<lineCount;j++){
+                if (chessBoardStatus[i][j]==0){
+                    continue;
+                }else if (chessBoardStatus[i][j] == Chess.BLACK_CHESS){
+                    //画黑棋
+                    drawBlackChess(canvas,i,j);
+                }else if (chessBoardStatus[i][j] == Chess.WHITE_CHESS){
+                    //画白棋
+                    drawWhiteChess(canvas,i,j);
+                }
+            }
+        }
     }
+
 
     /**
      * 画棋盘
@@ -198,6 +213,8 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
             //画竖线
             canvas.drawLine(x,startY,x,stopY,chessBoardLinePaint);
         }
+
+        drawBoardFocus(canvas);
     }
 
     /**
@@ -217,7 +234,15 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
 
     @Override
     public void drawGame() {
-
+        Canvas canvas = mHolder.lockCanvas();
+        if (mHolder==null || canvas==null){
+            return;
+        }
+        //清屏
+        canvas.drawPaint(new Paint());
+        drawChessBoard(canvas);
+        drawChess(canvas);
+        mHolder.unlockCanvasAndPost(canvas);
     }
 
     /**
@@ -272,5 +297,32 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        float touchX = event.getX();
+        float touchY = event.getY();
+
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                int X = (int)(touchX/oneWidth);
+                int Y = (int)(touchY/oneWidth);
+                if (X<=0) X=0;
+                if (X>=14) X=14;
+                if(Y<=0) Y=0;
+                if (Y>=14) Y=14;
+                game.addChess(X,Y);
+                drawGame();
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }
