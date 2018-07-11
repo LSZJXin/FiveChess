@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 
 import com.example.fivechess.R;
 import com.example.fivechess.chessgame.Chess;
+import com.example.fivechess.chessgame.Coordinate;
 import com.example.fivechess.chessgame.Game;
 
 /**
@@ -240,8 +241,15 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
         }
         //清屏
         canvas.drawPaint(new Paint());
+
+        //画棋盘
         drawChessBoard(canvas);
+        //画棋子
         drawChess(canvas);
+        //画最后的下棋的焦点
+        drawLatestChessFocus(canvas);
+
+        //保存画布信息
         mHolder.unlockCanvasAndPost(canvas);
     }
 
@@ -282,6 +290,18 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
     void drawBlackChessFocus(Canvas canvas,int x,int y){
         float radius = 5;
         canvas.drawCircle(startX+(oneWidth*x),startY+(oneWidth*y),radius,whiteChessPaint);
+    }
+
+    void drawLatestChessFocus(Canvas canvas){
+        Coordinate latest = game.getLatestChess();
+        int [][]chessBoardStates = game.getChessBoardStatus();
+        int x = latest.getX();
+        int y = latest.getY();
+        if (chessBoardStates[x][y] == Chess.WHITE_CHESS){
+            drawWhiteChessFocus(canvas,x,y);
+        }else if (chessBoardStates[x][y] == Chess.BLACK_CHESS){
+            drawBlackChessFocus(canvas,x,y);
+        }
     }
 
     @Override
