@@ -139,8 +139,10 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
         setFocusable(true);
         setFocusableInTouchMode(true);
         this.setKeepScreenOn(true);
+    }
 
-        game = new Game();
+    public void setGame(Game game){
+        this.game = game;
     }
 
     @Override
@@ -183,7 +185,7 @@ public class ChessView extends SurfaceView implements SurfaceHolder.Callback,ICh
         int [][]chessBoardStatus = game.getChessBoardStatus();
         for (int i=0;i<lineCount;i++){
             for (int j=0;j<lineCount;j++){
-                if (chessBoardStatus[i][j]==0){
+                if (chessBoardStatus[i][j]==Chess.BLANK_CHESS){
                     continue;
                 }else if (chessBoardStatus[i][j] == Chess.BLACK_CHESS){
                     //画黑棋

@@ -3,4 +3,7 @@
     <string name="label_mode_fight">双人对弈</string>
     <string name="label_mode_ai">人机对弈</string>
     <string name="label_mode_wifi">WIFI联网</string>
+    <string name="label_rollback">悔棋</string>
+    <string name="label_back">返回</string>
+    <string name="label_reset">重置</string>
 </resources>

@@ -8,6 +8,7 @@ public class Chess {
 
     public static final int BLACK_CHESS = 1;
     public static final int WHITE_CHESS = 2;
+    public static final int BLANK_CHESS = 0;
 
     public static final int CHESS_BOARD_LINE_COUNT = 15;
 

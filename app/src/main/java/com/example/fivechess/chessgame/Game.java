@@ -1,5 +1,7 @@
 package com.example.fivechess.chessgame;
 
+import android.util.Log;
+
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -28,7 +30,7 @@ public class Game {
     /**
      * 用一个双向队列来表示下棋的历史，用以完成悔棋功能
      */
-    Deque<Coordinate> historyList;
+    private static Deque<Coordinate> historyList;
 
     /**
      * 表示最后一颗棋子位置
@@ -36,7 +38,14 @@ public class Game {
     Coordinate latestChess = null;
 
     public Game() {
+        //初始化棋盘的状态
         chessBoardStatus = new int[lineCount][lineCount];
+        for (int i=0;i<chessBoardStatus.length;i++){
+            for (int j=0;j<chessBoardStatus[i].length;j++){
+                chessBoardStatus[i][j] = Chess.BLANK_CHESS;
+            }
+        }
+        //黑子先下
         whichTurn = Chess.BLACK_CHESS;
         historyList = new LinkedList<>();
     }
@@ -60,13 +69,22 @@ public class Game {
     }
 
     /**
+     * 返回历史列表
+     *
+     * @return
+     */
+    public static Deque<Coordinate> getHistoryList(){
+        return historyList;
+    }
+
+    /**
      * 添加白棋
      *
      * @param x
      * @param y
      */
     public void addWhiteChess(int x,int y){
-        if (chessBoardStatus[x][y]==0){
+        if (chessBoardStatus[x][y]==Chess.BLANK_CHESS){
             chessBoardStatus[x][y] = Chess.WHITE_CHESS;
             historyList.add(new Coordinate(x,y));
             latestChess = new Coordinate(x,y);
@@ -81,7 +99,7 @@ public class Game {
      * @param y
      */
     public void addBlackChess(int x,int y){
-        if (chessBoardStatus[x][y]==0){
+        if (chessBoardStatus[x][y]==Chess.BLANK_CHESS){
             chessBoardStatus[x][y] = Chess.BLACK_CHESS;
             historyList.add(new Coordinate(x,y));
             latestChess = new Coordinate(x,y);
@@ -96,10 +114,12 @@ public class Game {
      * @param y
      */
     public void addChess(int x,int y){
-        if (chessBoardStatus[x][y] == 0){
+        if (chessBoardStatus[x][y] == Chess.BLANK_CHESS){
             chessBoardStatus[x][y] = whichTurn;
             historyList.add(new Coordinate(x,y));
             latestChess = new Coordinate(x,y);
+            int result = GameRule.judgeResult(chessBoardStatus,x,y);
+            Log.d("结果", "addChess: result" + result);
             changeTurn();
         }
     }
@@ -119,15 +139,18 @@ public class Game {
      * 悔棋
      */
     public void rollback(){
-        Coordinate c = historyList.getLast();
+        Coordinate c = historyList.pollLast();
         if (c != null && !c.equals(null)){
-            historyList.remove();
-            chessBoardStatus[c.getX()][c.getY()] = 0;
 
-            //重新设置最新的棋子
-            Coordinate latest = historyList.getLast();
-            if (latest!=null || !c.equals(null)){
-                latestChess = new Coordinate(latest);
+            chessBoardStatus[c.getX()][c.getY()] = Chess.BLANK_CHESS;
+
+            //如果还有棋子,则将最新棋子回退
+            if (historyList.size()>0) {
+                //重新设置最新的棋子
+                Coordinate latest = historyList.getLast();
+                if (latest != null || !c.equals(null)) {
+                    latestChess = new Coordinate(latest);
+                }
             }
 
             //更换下棋一方
@@ -136,4 +159,15 @@ public class Game {
 
     }
 
+    /**
+     * 清空棋盘
+     */
+    public void resetGame(){
+        chessBoardStatus = new int[lineCount][lineCount];
+        for(int i=0;i<chessBoardStatus.length;i++){
+            for(int j=0;j<chessBoardStatus[i].length;j++){
+                chessBoardStatus[i][j] = Chess.BLANK_CHESS;
+            }
+        }
+    }
 }
