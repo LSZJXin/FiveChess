@@ -33,6 +33,42 @@ public class GameAI {
 
 
     /**
+     * 计算下棋的最佳位置
+     *
+     * @param chessBoardStates
+     * @return
+     */
+    public static Coordinate getBestCoordinate(int[][] chessBoardStates){
+        calculateValue(chessBoardStates);
+        int maxBlack = 0,maxWhite = 0;
+
+        int blackX = 0,blackY = 0;
+        int whiteX = 0,whiteY = 0;
+
+        for (int i=0;i<lineCount;i++){
+            for (int j=0;j<lineCount;j++){
+                if (maxBlack<black[i][j]){
+                    maxBlack = black[i][j];
+                    blackX = i;
+                    blackY = j;
+                }
+
+                if (maxWhite<white[i][j]){
+                    maxWhite = white[i][j];
+                    whiteX = i;
+                    whiteY = j;
+                }
+            }
+        }
+
+        if (maxBlack>maxWhite){
+            return new Coordinate(blackX,blackY);
+        }else {
+            return new Coordinate(whiteX,whiteY);
+        }
+    }
+
+    /**
      * 判断空格位置8个方向连线情况
      *
      *
@@ -106,6 +142,7 @@ public class GameAI {
                             ty += dy[k];
                             //越界直接退出
                             if (tx<0||ty<0||tx>14||ty>14){
+                                count = count+2;
                                 break;
                             }
 
@@ -127,9 +164,6 @@ public class GameAI {
                         }
                         //WHITE
                         chessLineStates[i][j][k][1] = count;
-
-                        Log.d("计算", "("+i+","+j+","+k+","+"0)"+"的值为:"+chessLineStates[i][j][k][0]);
-                        Log.d("计算", "("+i+","+j+","+k+","+"1)"+"的值为:"+chessLineStates[i][j][k][1]);
                     }
                 }
 
@@ -148,16 +182,11 @@ public class GameAI {
         for (int i=0;i<lineCount;i++){
             for (int j=0;j<lineCount;j++) {
 
-                /*if (chessBoardStates[i][j]==Chess.BLANK_CHESS){
-                    //如果该位置非空，直接退出
-                    break;
-                }*/
                 if (chessBoardStates[i][j] == Chess.BLANK_CHESS) {
                     value = 0;
                     for (int k = 0; k < 4; k++) {
 
                         int temp = chessLineStates[i][j][k][0] + chessLineStates[i][j][k + 4][0];
-                        Log.d("ZJXin", "(" + i + "," + j + "," + k + ")" + "黑的值为:" + temp);
                         switch (temp) {
                             //长连
                             case 46:
@@ -179,7 +208,7 @@ public class GameAI {
                                 break;
                             //活四
                             case 21:
-                                value += 10000;
+                                value += 40000;
                                 break;
                             //眠四
                             case 20:
@@ -232,7 +261,7 @@ public class GameAI {
                     for (int k = 0; k < 4; k++) {
 
                         int temp = chessLineStates[i][j][k][1] + chessLineStates[i][j][k + 4][1];
-                        //Log.d("ZJXin", "(" + i + "," + j + "," + k + ")" + "白的值为:" + temp);
+
                         switch (temp) {
                             //长连
                             case 46:
@@ -254,7 +283,7 @@ public class GameAI {
                                 break;
                             //活四
                             case 21:
-                                value += 10000;
+                                value += 40000;
                                 break;
                             //眠四
                             case 20:

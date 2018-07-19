@@ -1,6 +1,5 @@
 package com.example.fivechess.chessgame;
 
-import android.util.Log;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -37,6 +36,9 @@ public class Game {
      */
     Coordinate latestChess = null;
 
+    //默认模式为双人对弈
+    private int gameMode = GameMode.TWO_FIGHT;
+
     public Game() {
         //初始化棋盘的状态
         chessBoardStatus = new int[lineCount][lineCount];
@@ -48,6 +50,15 @@ public class Game {
         //黑子先下
         whichTurn = Chess.BLACK_CHESS;
         historyList = new LinkedList<>();
+    }
+
+    /**
+     * 设置游戏模式
+     *
+     * @param gameMode
+     */
+    public void setGameMode(int gameMode){
+        this.gameMode = gameMode;
     }
 
     /**
@@ -118,9 +129,19 @@ public class Game {
             chessBoardStatus[x][y] = whichTurn;
             historyList.add(new Coordinate(x,y));
             latestChess = new Coordinate(x,y);
-            int result = GameRule.judgeResult(chessBoardStatus,x,y);
-            Log.d("结果", "addChess: result" + result);
+            //下完棋后就改变下棋一方
             changeTurn();
+            if (gameMode == GameMode.PERSON_COMPUTER){
+                addChessWithAIMode();
+            }
+        }
+    }
+
+    public void addChessWithAIMode(){
+        //轮到电脑下棋的话
+        if (whichTurn == Chess.WHITE_CHESS){
+            Coordinate c = GameAI.getBestCoordinate(chessBoardStatus);
+            addChess(c.x,c.y);
         }
     }
 
